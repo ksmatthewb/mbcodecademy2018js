@@ -40,7 +40,7 @@ removeTrack(track){
 
 updatePlaylistName(name){
   console.log("setting Playlist name"+name);
-  this.setState( { playlistName: name } );
+  this.setState( { playlistName: name.name } );
 }
 
 loadUser(){
@@ -50,8 +50,7 @@ loadUser(){
 savePlaylist(){
   let trackURIs= this.state.playlistTracks;
   let listName = this.state.playlistName;
-  console.log("name:"+listName[0]);
-  console.log("uris:"+trackURIs[0]);
+  console.log("name:"+listName);
   Spotify.savePlaylist(listName, trackURIs).then(results => {
     this.setState( { playlistName: 'New Playlist', playlistTracks: [] } );
   });
