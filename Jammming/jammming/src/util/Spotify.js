@@ -39,15 +39,9 @@ const Spotify = {
 
       savePlaylist(playlistName, trackUris) {
     if (playlistName && trackUris) {
-      console.log("in savePlaylist");
+      // console.log("in savePlaylist");
         userAccessToken= this.getAccessToken();
         let headers = { Authorization: `Bearer ${userAccessToken}` };
-        let method = {
-            method: 'POST'
-          };
-        // let body= {
-        //     name: `${playlistName}`
-        //   };
         let userId= "";
         let playlistId;
         /*
@@ -59,17 +53,17 @@ const Spotify = {
             }).then(jsonResponse => {
               if (jsonResponse){
                  userId=jsonResponse.id;
-                 console.log("userId:"+userId);
+                 // console.log("userId:"+userId);
                 /*
                 CREATE PLAYLIST, GET ID
                 */
-                return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+                 return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
                   headers:  { Authorization: `Bearer ${userAccessToken}`,
                   "Content-Type": "application/json"
 
                  },
-                  method: method,
-                  body: JSON.stringify({ name: `${playlistName}`})
+                  method: "POST",
+                  body: JSON.stringify({ name: [playlistName[0]]})
                 }).then(response => {
                     return response.json();
                   }).then(jsonResp => {
@@ -78,11 +72,18 @@ const Spotify = {
                       /*
                       CREATE PLAYLIST, SET TRACKS, GET ID
                       */
-                    return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
+                     return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`, {
                       headers:  headers,
-                      method: method,
-                      body: JSON.stringify({ uris: trackUris  })
-                  });
+                      method: "POST",
+                      body: JSON.stringify({ uris: [trackUris[0].uri]  })
+                  }).then(r => {
+                      console.log(r)
+                      return r.json();
+                    })
+                    .then(re => {console.log(re)
+                      return re;
+                    }).catch(e => {console.log(e)})
+
                     }
                 });
               }
@@ -98,7 +99,7 @@ const Spotify = {
   search(term){
       if (!userAccessToken) {
         userAccessToken = this.getAccessToken();
-        console.log(userAccessToken);
+        // console.log(userAccessToken);
       }
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: {

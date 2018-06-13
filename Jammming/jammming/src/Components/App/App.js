@@ -39,12 +39,19 @@ removeTrack(track){
 }
 
 updatePlaylistName(name){
+  console.log("setting Playlist name"+name);
   this.setState( { playlistName: name } );
+}
+
+loadUser(){
+  Spotify.getAccessToken();
 }
 
 savePlaylist(){
   let trackURIs= this.state.playlistTracks;
   let listName = this.state.playlistName;
+  console.log("name:"+listName[0]);
+  console.log("uris:"+trackURIs[0]);
   Spotify.savePlaylist(listName, trackURIs).then(results => {
     this.setState( { playlistName: 'New Playlist', playlistTracks: [] } );
   });
@@ -58,6 +65,7 @@ search(term){
 }
 
   render() {
+    this.loadUser();
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
